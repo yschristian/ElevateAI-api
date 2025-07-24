@@ -1,0 +1,164 @@
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum role {
+  admin
+  learner
+}
+
+
+enum courseType {
+  free
+  premium
+}
+
+model User {
+  id                     String                 @id @default(auto()) @map("_id") @db.ObjectId
+  email                  String                 @unique
+  firstName              String
+  lastName               String
+  password               String
+  isActivated            Boolean                @default(false)
+  verificationCode       String?
+  verificationCodeExpiry DateTime?
+  emailToken             String?
+  createdAt              DateTime               @default(now())
+  role                   role                   @default(learner)
+  courses                Enrollment[]
+  assessments            Assessment[]
+  progress               Progress[]
+  course                 Course[]
+  AssessmentSubmission   AssessmentSubmission[]
+  certificate            certificate[]
+  Schedule               Schedule[]
+}
+
+model Course {
+  id                   String                 @id @default(auto()) @map("_id") @db.ObjectId
+  title                String
+  description          String
+  imageUrl             String
+  price                String?
+  courseType           courseType             @default(free)
+  user                 User                   @relation(fields: [userId], references: [id])
+  userId               String                 @db.ObjectId
+  createdAt            DateTime               @default(now())
+  lessons              Lesson[]
+  assessments          Assessment[]
+  enrollments          Enrollment[]
+  progress             Progress[]
+  AssessmentSubmission AssessmentSubmission[]
+  certificate          certificate[]
+}
+
+model Lesson {
+  id          String       @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  content     String?
+  description String?
+  videoUrl    String?
+  course      Course       @relation(fields: [courseId], references: [id])
+  courseId    String       @db.ObjectId
+  subLessons  subLessons[]
+  createdAt   DateTime     @default(now())
+  Progress    Progress[]
+}
+
+model subLessons {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  title     String
+  content   String?
+  description String?
+  videoUrl  String?
+  order     String   @default("0")
+  createdAt DateTime @default(now())
+  lessonId  String   @db.ObjectId
+  lesson    Lesson   @relation(fields: [lessonId], references: [id])
+}
+
+
+model Assessment {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  question      String
+  options       String[]
+  correctAnswer String
+  course        Course   @relation(fields: [courseId], references: [id] ,onDelete: Cascade)
+  user          User     @relation(fields: [userId], references: [id])
+  courseId      String   @db.ObjectId
+  userId        String   @db.ObjectId
+  createdAt     DateTime @default(now())
+}
+
+model AssessmentSubmission {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  user           User     @relation(fields: [userId], references: [id])
+  userId         String   @db.ObjectId
+  course         Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  answers        Json
+  isCorrect      Boolean
+  courseId       String   @db.ObjectId
+  score          Int
+  percentage     Float
+  certified      Boolean
+  assessmentDate DateTime
+  createdAt      DateTime @default(now())
+}
+
+
+model Enrollment {
+  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  user           User      @relation(fields: [userId], references: [id])
+  course         Course    @relation(fields: [courseId], references: [id])
+  userId         String    @db.ObjectId
+  courseId       String    @db.ObjectId
+  enrollmentDate DateTime
+  completionDate DateTime?
+  createdAt      DateTime  @default(now())
+}
+
+model Progress {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  user         User     @relation(fields: [userId], references: [id])
+  course       Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  lesson       Lesson?  @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  userId       String   @db.ObjectId
+  courseId     String   @db.ObjectId
+  lessonId     String?  @db.ObjectId
+  progress     Float?   @default(0.0)
+  completed    Boolean  @default(false)
+  lastAccessed DateTime @default(now())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@unique([userId, courseId, lessonId])
+}
+
+model certificate {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  user            User     @relation(fields: [userId], references: [id])
+  userId          String   @db.ObjectId
+  course          Course   @relation(fields: [courseId], references: [id])
+  courseId        String   @db.ObjectId
+  urlOfCert       String
+  certificateCode String
+  createdAt       DateTime @default(now())
+}
+
+
+model Schedule {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String?
+  date        DateTime
+  time        String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String   @db.ObjectId
+  active     Boolean  @default(true)
+  createdAt   DateTime @default(now())
+}
