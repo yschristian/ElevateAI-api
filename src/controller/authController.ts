@@ -24,7 +24,7 @@ const authController = {
             const hashedPassword = await encryptPassword(password);
             const emailToken = crypto.randomBytes(16).toString("hex");
             const isExist = await authServices.isEmailExist(email);
-            if (isExist) return res.status(200).json({ error: "email already exist" })
+            if (isExist) return res.status(400).json({ error: "email already exist" })
             const user = await authServices.register({
                 email: email,
                 firstName: firstName,
@@ -81,9 +81,9 @@ const authController = {
             const { userId, verificationCode } = req.body;
             const user = await userService.getUserByKey({ id: userId });
             if (!user) return res.status(200).json({ error: "user not found" })
-            if (user.verificationCode !== verificationCode) return res.status(200).json({ error: "invalid verification code" })
+            if (user.verificationCode !== verificationCode) return res.status(400).json({ error: "invalid verification code" })
             if (user.verificationCodeExpiry && user.verificationCodeExpiry < new Date()) {
-                return res.status(200).json({ error: 'Verification code has expired, kindly login again!' })
+                return res.status(400).json({ error: 'Verification code has expired, kindly login again!' })
             }
             if (user) {
                 user.verificationCode = null
