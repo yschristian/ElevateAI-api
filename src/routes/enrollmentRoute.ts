@@ -10,6 +10,8 @@ router.get('/byCourse/:courseId', isAdmin, enrollmentController.getUsersEnrolled
     .get('/byUser', isLoggedIn, enrollmentController.getEnrollmentByUserId)
     .put('/update/:id', isAdmin, enrollmentController.updateEnrollment)
     .delete('/delete/:id', isAdmin, enrollmentController.deleteEnrollment)
-    .get('/number', isAdmin, enrollmentController.getNumberOfEnrollments);
+    .get('/number', isAdmin, enrollmentController.getNumberOfEnrollments)
+    .get('/length', isLoggedIn, enrollmentController.getEnrollmentLengthByUserId)
+    .post('/create/:courseId', isLoggedIn, enrollmentController.createEnrollment)
 
 export default router

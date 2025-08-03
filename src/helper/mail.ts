@@ -72,8 +72,7 @@ const mailer = async (userInfo: UserInfo, action: Action): Promise<void> => {
             emailTo = userInfo.email;
             composition = `
                 <p>Dear ${userInfo.firstName} ${userInfo.lastName},</p>
-                <p>We are pleased to inform you that your Certificate has been approved and is attached to this email. This certificate confirms your compliance with data processing regulations.</p>
-                <p>Thank you for your commitment to data protection standards.</p>
+                <p>We are pleased to inform you that your Certificate has been approved and is attached to this email.</p>
                 
                 <p>Best Regards,</p>`;
 

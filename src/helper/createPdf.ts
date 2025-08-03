@@ -132,7 +132,7 @@ export const createPDF = (certificateData: CertificateData): Promise<Buffer> => 
         doc.rect(0, 0, doc.page.width, doc.page.height).fill('#F5F5F5');
 
         // Add the logo on the left side with a larger size
-        const logoPath = path.join(__dirname, '../images/cyberwarelogo.png');
+        const logoPath = path.join(__dirname, '../images/elevate.png');
         if (fs.existsSync(logoPath)) {
             console.log("Logo file exists:", logoPath);
             doc.image(logoPath, 50, 40, { width: 100, height: 100 }); // Increased size

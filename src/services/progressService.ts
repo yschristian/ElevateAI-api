@@ -1,39 +1,16 @@
 import prisma from '../client';
 import { Prisma } from '@prisma/client';
+import mailer from '../helper/mail';
+import { createPDF } from '../helper/createPdf';
+import { uploadCertificate } from '../helper/uploadCert';
 
 export const progressService = {
-  // upsertProgress: async (userId: string, courseId: string,progress: number, lessonId?: any, subLessonId?: any) => {
-  //   const cappedProgress = Math.min(Math.max(progress, 0), 100);
-  //   return prisma.progress.upsert({
-  //     where: {
-  //       userId_courseId_lessonId_subLessonId: {
-  //         userId,
-  //         courseId,
-  //         lessonId: lessonId || undefined,
-  //         subLessonId: subLessonId || undefined,
-  //       },
-  //     },
-  //     update: {
-  //       progress: cappedProgress,
-  //       completed: cappedProgress >= 100,
-  //       lastAccessed: new Date(),
-  //     },
-  //     create: {
-  //       userId,
-  //       courseId,
-  //       lessonId: lessonId || undefined,
-  //       subLessonId: subLessonId || undefined,
-  //       progress: cappedProgress,
-  //       completed: cappedProgress >= 100,
-  //     },
-  //   });
-  // },
 
   upsertProgress: async (
     userId: string,
     courseId: string,
     progress: number,
-    lessonId?: any,
+    lessonId?: any | null,
   ) => {
 
     const cappedProgress = Math.min(Math.max(progress, 0), 100);
@@ -68,6 +45,46 @@ export const progressService = {
         lessonId: lessonId ?? null,
       },
     });
+
+    if (cappedProgress === 100) {
+      const user = await prisma.user.findUnique({ where: { id: userId } });
+      const course = await prisma.course.findUnique({ where: { id: courseId } });
+      const id: any = course && course.id;
+
+      const certificateData = {
+        firstName: user?.firstName,
+        lastName: user?.lastName,
+        course: { title: course?.title },
+        companyName: "ElevAIte",
+        completionDate: new Date().toLocaleDateString(),
+        certificateCode: `CA-${new Date().getFullYear()}-${id}`,
+      };
+      const pdfBuffer = await createPDF(certificateData);
+      const certificateUrl = await uploadCertificate(pdfBuffer, id);
+
+      if (!user || !course) {
+        return {
+          error: "User or course not found"
+        }
+      }
+      const cert = await prisma.certificate.create({
+        data: {
+          userId: user?.id,
+          courseId: course?.id,
+          certificateCode: certificateData.certificateCode,
+          urlOfCert: certificateUrl,
+          createdAt: new Date(),
+        },
+      });
+
+      await mailer({
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        certificate: pdfBuffer as Buffer,
+      }, "generateCerticate");
+
+    }
 
     return results;
   },
@@ -121,8 +138,39 @@ export const progressService = {
     return (completedLessons / allLessons) * 100;
   },
 
-  markLessonComplete: async (userId: string, courseId: string, lessonId?: any,) => {
-    return progressService.upsertProgress(userId, courseId, 100, lessonId,);
+  // In your progress service
+  markLessonComplete: async (userId: string, courseId: string, lessonId?: any) => {
+    const cappedProgress = 100;
+
+    const where: Prisma.ProgressWhereUniqueInput = {
+      userId_courseId_lessonId: {
+        userId,
+        courseId,
+        lessonId: lessonId ?? null,
+      },
+    };
+
+    const data = {
+      progress: cappedProgress,
+      completed: true,
+      lastAccessed: new Date(),
+    };
+
+    // Only update/create progress without certificate generation
+    const results = await prisma.progress.upsert({
+      where,
+      update: data,
+      create: {
+        ...data,
+        userId,
+        courseId,
+        lessonId: lessonId ?? null,
+      },
+    });
+
+    console.log('Lesson marked complete:', results);
+    // DO NOT generate certificate here - only for course completion
+    return results;
   },
 
   getNextUncompletedLesson: async (userId: string, courseId: string) => {
@@ -164,7 +212,7 @@ export const progressService = {
 
     return null;
   },
- 
+
   getProgressInEachCourse: async () => {
     const courseProgresses = await prisma.progress.findMany({
 
@@ -174,13 +222,13 @@ export const progressService = {
 
     });
 
-    const courseProgressMap = new Map<string, { totalProgress: number; count: number ,imageUrl: string | null }>();
+    const courseProgressMap = new Map<string, { totalProgress: number; count: number, imageUrl: string | null }>();
 
     courseProgresses.forEach(progress => {
       const courseName = progress.course.title
       const imageUrl = progress.course.imageUrl
       if (!courseProgressMap.has(courseName)) {
-        courseProgressMap.set(courseName, { totalProgress: 0, count: 0 ,imageUrl});
+        courseProgressMap.set(courseName, { totalProgress: 0, count: 0, imageUrl });
       }
       const courseData = courseProgressMap.get(courseName)!;
       courseData.totalProgress += (progress.progress ?? 0);

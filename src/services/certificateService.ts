@@ -25,6 +25,7 @@ const cerficateService = {
     getCeritificateById: async (filter: Prisma.certificateWhereInput) => {
         const certificates = await prisma.certificate.findMany({
             where: filter,
+            distinct: ['userId', 'courseId'],
             orderBy: {
                 createdAt: 'asc'
             },
@@ -41,7 +42,19 @@ const cerficateService = {
                 }
             }
         });
-        return certificates;
+        const uniqueCertificates = [];
+        const seen = new Set();
+
+        for (const cert of certificates) {
+            const key = `${cert.userId}-${cert.courseId}`;
+            if (!seen.has(key)) {
+                seen.add(key);
+                uniqueCertificates.push(cert);
+            }
+        }
+        
+        return uniqueCertificates;
+
     },
     deleteCertificate: async (filter: Prisma.certificateWhereUniqueInput) => {
         const certificate = await prisma.certificate.delete({

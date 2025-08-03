@@ -129,7 +129,7 @@ model Progress {
   lesson       Lesson?  @relation(fields: [lessonId], references: [id], onDelete: Cascade)
   userId       String   @db.ObjectId
   courseId     String   @db.ObjectId
-  lessonId     String?  @db.ObjectId
+  lessonId     String?  @db.ObjectId 
   progress     Float?   @default(0.0)
   completed    Boolean  @default(false)
   lastAccessed DateTime @default(now())

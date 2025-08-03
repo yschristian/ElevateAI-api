@@ -106,7 +106,7 @@ const assessmentServices = {
                 firstName: user?.firstName,
                 lastName: user?.lastName,
                 course: { title: course?.title },
-                companyName: "CyberAware Solutions",
+                companyName: "ELEVAIte",
                 completionDate: new Date().toLocaleDateString(),
                 certificateCode: `CA-${new Date().getFullYear()}-${submission.id}`,
             };

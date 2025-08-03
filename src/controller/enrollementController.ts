@@ -7,6 +7,22 @@ interface CustomRequest extends Request {
 }
 
 const enrollmentController = {
+    createEnrollment: catchAsync(async (req, res) => {
+        try {
+            const { courseId } = req.params;
+            const userId = (req as CustomRequest).user.id;
+            const existingEnrollment = await enrollmentService.existingEnrollment(courseId, userId);
+            if (existingEnrollment) {
+                return res.status(400).json({ error: 'User already enrolled in this course' });
+            }
+            const enrollment = await enrollmentService.enrollUser(courseId, userId);
+            return res.status(201).json({ message: 'User enrolled successfully', data: enrollment });
+        } catch (err) {
+            console.error(err);
+            return res.status(500).json({ error: 'Internal server error' });
+        }
+    }),
+
     getAllEnrolled: catchAsync(async (req, res) => {
         try {
             const allEnrolled = await enrollmentService.getAllEnrolled();
@@ -26,10 +42,10 @@ const enrollmentController = {
             if (enrolledUsers.length === 0) {
                 return res.status(404).json({ error: 'No users enrolled in this course yet!' });
             }
-            return res.status(200).json({ 
+            return res.status(200).json({
                 message: 'Users enrolled in this course',
                 data: enrolledUsers
-             });
+            });
         } catch (err) {
             console.error(err);
             return res.status(500).json({ error: 'Internal server error' });
@@ -45,6 +61,21 @@ const enrollmentController = {
             return res.status(200).json({ data: enrollment });
         } catch (err) {
             console.error(err);
+            return res.status(500).json({ error: 'Internal server error' });
+        }
+    }),
+
+    getEnrollmentLengthByUserId: catchAsync(async (req, res) => {
+        try {
+            const userId = (req as CustomRequest).user.id;
+            const enrollments = await enrollmentService.getEnrolledById({ userId });
+            const count = enrollments.length;
+            return res.status(200).json({
+                message: 'Total number of enrollments for user',
+                data: count
+            });
+        } catch (error) {
+            console.error(error);
             return res.status(500).json({ error: 'Internal server error' });
         }
     }),
