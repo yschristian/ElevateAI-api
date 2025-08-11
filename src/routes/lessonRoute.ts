@@ -11,6 +11,6 @@ router.post("/create/:courseId", uploadVideo.single("videoUrl"), lessonControlle
         .get("/single/:id", lessonController.getLesson)
         .get("/byCourse/:courseId", lessonController.getLessonByCourseId)
         .put("/update/:id", lessonController.updateLesson)
-        .delete("/delete/:id", lessonController.deleteLesson);
+        .delete("/delete/:id", lessonController.deleteLesson)
 
 export default router;

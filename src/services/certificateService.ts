@@ -20,7 +20,19 @@ const cerficateService = {
                 }
             }
         });
-        return certificates;
+        
+        const uniqueCertificates = [];
+        const seen = new Set();
+
+        for (const cert of certificates) {
+            const key = `${cert.userId}-${cert.courseId}`;
+            if (!seen.has(key)) {
+                seen.add(key);
+                uniqueCertificates.push(cert);
+            }
+        }
+        
+        return uniqueCertificates;
     },
     getCeritificateById: async (filter: Prisma.certificateWhereInput) => {
         const certificates = await prisma.certificate.findMany({

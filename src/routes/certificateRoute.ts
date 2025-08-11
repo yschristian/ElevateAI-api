@@ -4,6 +4,8 @@ import { isAdmin, isLoggedIn } from "../middleware/isLoggedin";
 const router = express.Router();
 
 router.get("/all", isAdmin, certificateController.getAllCertificates)
+    .get("/number", isAdmin, certificateController.getNumberOfCertificates)
+    .get("/numberByUser", isLoggedIn, certificateController.getNumberCertificateByUserId)
     .get("/ById/:id", certificateController.getCertificateById)
     .get("/byUser", isLoggedIn, certificateController.getCertificateByUserId)
     .delete("/:id", isAdmin, certificateController.deleteCertificate)

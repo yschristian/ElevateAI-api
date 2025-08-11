@@ -18,6 +18,18 @@ const certificateController = {
             console.log(error)
         }
     }),
+    getNumberOfCertificates: catchAsync(async (req, res) => {
+        try {
+            const certificates = await cerficateService.getAllCertificates();
+            if (!certificates) return res.status(404).json({ error: "No certificates found" });
+            return res.status(200).json({
+                message: "Number of certificates fetched successfully",
+                data: certificates.length
+            });
+        } catch (error) {
+            console.log(error)
+        }
+    }),
     getCertificateById: catchAsync(async (req, res) => {
         try {
             const id = req.params.id;
@@ -26,6 +38,19 @@ const certificateController = {
             return res.status(200).json({
                 message: "Certificate fetched successfully",
                 data: certificates
+            });
+        } catch (error) {
+            console.log(error)
+        }
+    }),
+     getNumberCertificateByUserId: catchAsync(async (req, res) => {
+        try {
+            const userId = (req as CustomRequest).user.id;
+            const certificates = await cerficateService.getCeritificateById({ userId });
+            if (!certificates) return res.status(404).json({ error: "No certificate!", });
+            return res.status(200).json({
+                message: "Certificate fetched successfully",
+                data: certificates.length
             });
         } catch (error) {
             console.log(error)
