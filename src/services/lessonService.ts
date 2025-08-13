@@ -86,10 +86,19 @@ const lessonService = {
         const updatedLesson = await prisma.lesson.update({ where: filter, data });
         return updatedLesson;
     },
-    deleteLesson: async (filter: Prisma.LessonWhereUniqueInput) => {
-        const deletedLesson = await prisma.lesson.delete({ where: filter });
-        return deletedLesson;
-    },
+   deleteLesson: async (filter: Prisma.LessonWhereUniqueInput) => {
+    await prisma.subLessons.deleteMany({
+        where: {
+            lessonId: filter.id, 
+        },
+    });
+    const deletedLesson = await prisma.lesson.delete({
+        where: filter,
+    });
+
+    return deletedLesson;
+},
+
     getLessonsByCourseId: async (filter: Prisma.LessonWhereInput) => {
         const lessons = await prisma.lesson.findMany({
             where: { ...filter }, 
@@ -103,6 +112,7 @@ const lessonService = {
                         title: true,
                         description: true,
                         imageUrl: true,
+                        courseType: true,
                         user: {
                             select: {
                                 id: true,

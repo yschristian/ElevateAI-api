@@ -10,11 +10,11 @@ const lessonController = {
             const videoFile = req.file;
             const courseId = req.params.courseId;
 
+
             let videoUrl;
             if (videoFile) {
                 videoUrl = await uploadToCloudinary(videoFile);
             }
-            
             const sanitizedContent = sanitizeContent(content);
             const newLesson = await lessonService.createLesson({
                 title,

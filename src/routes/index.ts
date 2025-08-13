@@ -9,6 +9,7 @@ import enrollmentRoutes from "./enrollmentRoute"
 import progressRoutes from "./progressRoute";
 import certificateRoutes from "./certificateRoute"
 import scheduleRoutes from "./scheduleRoute"
+import bogRoutes from "./blog";
 
 const router = express.Router();
 
@@ -50,9 +51,14 @@ const routes = [
     route: certificateRoutes
   },
   {
-    path:"/schedule",
+    path: "/schedule",
     route: scheduleRoutes
+  },
+  {
+    path: "/blog",
+    route: bogRoutes
   }
+
 ];
 
 routes.forEach((route) => {
