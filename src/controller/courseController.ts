@@ -3,6 +3,7 @@ import catchAsync from "../helper/catchAsync";
 import cloudinary from "../helper/cloudImag"
 import { Request } from "express";
 import { sanitizeContent } from "../helper/sanitizeContent";
+import subscribeService from "../services/subscribeService";
 
 interface CustomRequest extends Request {
     user: any;
@@ -24,6 +25,20 @@ const courseController = {
                 imageUrl: result.secure_url,
                 userId
             });
+
+            // Automatically notify all subscribers about the new course
+            try {
+                const notificationResult = await subscribeService.notifyNewCourse(
+                    newCourse.title,
+                    newCourse.description,
+                    newCourse.id
+                );
+                console.log(`✅ Course created and ${notificationResult.notifiedCount || 0} subscribers notified`);
+            } catch (emailError) {
+                console.error('⚠️ Course created successfully, but failed to notify subscribers:', emailError);
+            }
+
+
             return res.status(201).json({
                 message: "Course created successfully",
                 data: newCourse,
@@ -131,7 +146,7 @@ const courseController = {
     deleteCourse: catchAsync(async (req, res) => {
         try {
             const { id } = req.params;
-            await courseService.deleteCourse( id );
+            await courseService.deleteCourse(id);
             return res.status(200).json({
                 message: "Course deleted successfully",
             });

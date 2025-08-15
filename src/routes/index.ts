@@ -10,6 +10,7 @@ import progressRoutes from "./progressRoute";
 import certificateRoutes from "./certificateRoute"
 import scheduleRoutes from "./scheduleRoute"
 import bogRoutes from "./blog";
+import subscribeRoute from "./subscribeRoute"
 
 const router = express.Router();
 
@@ -57,6 +58,10 @@ const routes = [
   {
     path: "/blog",
     route: bogRoutes
+  },
+  {
+    path: "/sub",
+    route: subscribeRoute
   }
 
 ];
