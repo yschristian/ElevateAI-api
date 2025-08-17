@@ -23,6 +23,7 @@ model User {
   firstName              String
   lastName               String
   password               String
+  bio                    String?                
   isActivated            Boolean                @default(true)
   verificationCode       String?
   verificationCodeExpiry DateTime?

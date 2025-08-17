@@ -101,11 +101,12 @@ const mailer = async (userInfo: UserInfo, action: Action, courseInfo?: CourseInf
         case "Subscribe":
             subject = "Welcome to ElevAIte - Subscription Confirmed!";
             emailTo = userInfo.email;
+            const username1 = userInfo.email && userInfo.email.split("@")[0];
             composition = `
                 <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-                    <h2 style="color: #2563eb; text-align: center;">Welcome to Elevate!</h2>
-                    <p>Dear ${userInfo.email},</p>
-                    <p>Thank you for subscribing to Elevate! 🎉</p>
+                    <h2 style="color: #2563eb; text-align: center;">Welcome to ElevAIte!</h2>
+                    <p>Dear ${username1},</p>
+                    <p>Thank you for subscribing to ElevAIte! 🎉</p>
                     <p>You will now receive email notifications whenever we upload new courses to our platform. Stay tuned for:</p>
                     <ul style="margin: 20px 0; padding-left: 20px;">
                         <li>🎯 New course announcements</li>
@@ -120,17 +121,18 @@ const mailer = async (userInfo: UserInfo, action: Action, courseInfo?: CourseInf
                     <p style="font-size: 12px; color: #666; margin-top: 30px;">
                         If you wish to unsubscribe at any time, <a href="http://localhost:4000/api/sub/unsubscribe/${userInfo.email}">click here</a>.
                     </p>
-                    <p>Best regards,<br/>The Elevate Team</p>
+                    <p>Best regards,<br/>The ElevAIte Team</p>
                 </div>`;
             break;
         case "NewCourse":
             subject = `New Course Available: ${courseInfo?.courseTitle}`;
             emailTo = userInfo.email;
+            const username = userInfo.email && userInfo.email.split("@")[0];
             composition = `
                 <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
                     <h2 style="color: #2563eb; text-align: center;">📚 New Course Alert!</h2>
-                    <p>Dear ${userInfo.email},</p>
-                    <p>We're excited to announce a new course has been added to Elevate!</p>
+                    <p>Dear ${username},</p>
+                    <p>We're excited to announce a new course has been added to ElevAIte!</p>
                     
                     <div style="background-color: #f8fafc; border-left: 4px solid #2563eb; padding: 20px; margin: 20px 0;">
                         <h3 style="color: #1e40af; margin: 0 0 10px 0;">${courseInfo?.courseTitle}</h3>
@@ -162,7 +164,7 @@ const mailer = async (userInfo: UserInfo, action: Action, courseInfo?: CourseInf
     }
 
     const mailOptions = {
-        from: `Elevate Platform <${config.sendMail.mail}>`,
+        from: `ElevAIte <${config.sendMail.mail}>`,
         to: emailTo,
         subject,
         html: composition,
