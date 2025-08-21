@@ -33,12 +33,9 @@ const courseController = {
                     newCourse.description,
                     newCourse.id
                 );
-                console.log(`✅ Course created and ${notificationResult.notifiedCount || 0} subscribers notified`);
             } catch (emailError) {
                 console.error('⚠️ Course created successfully, but failed to notify subscribers:', emailError);
             }
-
-
             return res.status(201).json({
                 message: "Course created successfully",
                 data: newCourse,

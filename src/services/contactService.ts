@@ -11,6 +11,11 @@ const contactService = {
             orderBy: { createdAt: 'desc' }
         });
     },
+
+    getById: async (id:any) => {
+        return await prisma.contact.findFirst(id);
+    },
+
     deleteContact: async (filter: Prisma.contactWhereUniqueInput) => {
         const user = await prisma.contact.delete({ where: filter })
         return user
