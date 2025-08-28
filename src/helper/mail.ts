@@ -71,7 +71,7 @@ const mailer = async (userInfo: UserInfo, action: Action, courseInfo?: CourseInf
               We received a request to reset your password. The password reset link is valid for the next <strong>2 hours</strong>. Please click the button below to proceed:
             </p>
             <div style="text-align: center; margin: 30px 0;">
-              <a href="http://localhost:3000/resetpassword/${userInfo.token}" style="background-color: #2563eb; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block; font-size: 16px; font-weight: 500; transition: background-color 0.3s;">
+              <a href="dataelevaite.com/resetpassword/${userInfo.token}" style="background-color: #2563eb; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block; font-size: 16px; font-weight: 500; transition: background-color 0.3s;">
                 Reset Your Password
               </a>
             </div>
@@ -85,7 +85,7 @@ const mailer = async (userInfo: UserInfo, action: Action, courseInfo?: CourseInf
           </div>
           <div style="background-color: #f8f9fa; padding: 15px; text-align: center; border-radius: 0 0 8px 8px; font-size: 12px; color: #666666;">
             © 2025 ElevAIte. All rights reserved.<br/>
-            <a href="http://localhost:3000/unsubscribe" style="color: #2563eb; text-decoration: none;">Unsubscribe</a>
+            <a href="dataelevaite.com/unsubscribe" style="color: #2563eb; text-decoration: none;">Unsubscribe</a>
           </div>
         </div>`;
       break;
@@ -109,7 +109,7 @@ const mailer = async (userInfo: UserInfo, action: Action, courseInfo?: CourseInf
               Thank you for registering with ElevAIte! We’re thrilled to have you on board. Get started by exploring our courses and unlocking your learning potential.
             </p>
             <div style="text-align: center; margin: 30px 0;">
-              <a href="http://localhost:3000/explore-course" style="background-color: #2563eb; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block; font-size: 16px; font-weight: 500; transition: background-color 0.3s;">
+              <a href="dataelevaite.com/explore-course" style="background-color: #2563eb; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block; font-size: 16px; font-weight: 500; transition: background-color 0.3s;">
                 Explore Courses
               </a>
             </div>
@@ -120,7 +120,7 @@ const mailer = async (userInfo: UserInfo, action: Action, courseInfo?: CourseInf
           </div>
           <div style="background-color: #f8f9fa; padding: 15px; text-align: center; border-radius: 0 0 8px 8px; font-size: 12px; color: #666666;">
             © 2025 ElevAIte. All rights reserved.<br/>
-            <a href="http://localhost:3000/unsubscribe" style="color: #2563eb; text-decoration: none;">Unsubscribe</a>
+            <a href="dataelevaite.com/unsubscribe" style="color: #2563eb; text-decoration: none;">Unsubscribe</a>
           </div>
         </div>`;
       break;
@@ -152,7 +152,7 @@ const mailer = async (userInfo: UserInfo, action: Action, courseInfo?: CourseInf
           </div>
           <div style="background-color: #f8f9fa; padding: 15px; text-align: center; border-radius: 0 0 8px 8px; font-size: 12px; color: #666666;">
             © 2025 ElevAIte. All rights reserved.<br/>
-            <a href="http://localhost:3000/unsubscribe" style="color: #2563eb; text-decoration: none;">Unsubscribe</a>
+            <a href="dataelevaite.com/unsubscribe" style="color: #2563eb; text-decoration: none;">Unsubscribe</a>
           </div>
         </div>`;
       break;
@@ -184,7 +184,7 @@ const mailer = async (userInfo: UserInfo, action: Action, courseInfo?: CourseInf
           </div>
           <div style="background-color: #f8f9fa; padding: 15px; text-align: center; border-radius: 0 0 8px 8px; font-size: 12px; color: #666666;">
             © 2025 ElevAIte. All rights reserved.<br/>
-            <a href="http://localhost:3000/unsubscribe" style="color: #2563eb; text-decoration: none;">Unsubscribe</a>
+            <a href="dataelevaite.com/unsubscribe" style="color: #2563eb; text-decoration: none;">Unsubscribe</a>
           </div>
         </div>`;
 
@@ -228,7 +228,7 @@ const mailer = async (userInfo: UserInfo, action: Action, courseInfo?: CourseInf
           </div>
           <div style="background-color: #f8f9fa; padding: 15px; text-align: center; border-radius: 0 0 8px 8px; font-size: 12px; color: #666666;">
             © 2025 ElevAIte. All rights reserved.<br/>
-            <a href="http://localhost:3000/unsubscribe" style="color: #2563eb; text-decoration: none;">Unsubscribe</a>
+            <a href="dataelevaite.com/unsubscribe" style="color: #2563eb; text-decoration: none;">Unsubscribe</a>
           </div>
         </div>`;
       break;
@@ -258,7 +258,7 @@ const mailer = async (userInfo: UserInfo, action: Action, courseInfo?: CourseInf
               <li>💡 Learning tips and resources</li>
             </ul>
             <div style="text-align: center; margin: 30px 0;">
-              <a href="http://localhost:3000/explore-course" style="background-color: #2563eb; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block; font-size: 16px; font-weight: 500; transition: background-color 0.3s;">
+              <a href="dataelevaite.com/explore-course" style="background-color: #2563eb; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block; font-size: 16px; font-weight: 500; transition: background-color 0.3s;">
                 Explore Courses
               </a>
             </div>
@@ -300,10 +300,10 @@ const mailer = async (userInfo: UserInfo, action: Action, courseInfo?: CourseInf
               Ready to expand your knowledge? This course is now available!
             </p>
             <div style="text-align: center; margin: 30px 0;">
-              <a href="http://localhost:3000/course/${courseInfo?.courseId || 'explore-course'}" style="background-color: #2563eb; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block; font-size: 16px; font-weight: 500; margin-right: 10px; transition: background-color 0.3s;">
+              <a href="dataelevaite.com/explore-course}" style="background-color: #2563eb; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block; font-size: 16px; font-weight: 500; margin-right: 10px; transition: background-color 0.3s;">
                 View Course
               </a>
-              <a href="http://localhost:3000/explore-course" style="background-color: #64748b; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block; font-size: 16px; font-weight: 500; transition: background-color 0.3s;">
+              <a href="dataelevaite.com/explore-course" style="background-color: #64748b; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block; font-size: 16px; font-weight: 500; transition: background-color 0.3s;">
                 Browse All Courses
               </a>
             </div>
