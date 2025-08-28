@@ -5,12 +5,13 @@ const contactController = {
   // Create a new contact
   createContact: catchAsync(async (req, res) => {
     try {
-      const { email, FullName, phone, message } = req.body;
+      const { email, FullName, phone, message,subject } = req.body;
       const response = await contactService.createContact({
         email,
         FullName,
         phone,
         message,
+        subject
       });
       return res.status(201).json({
         message: "Message sent successfully",

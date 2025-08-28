@@ -11,6 +11,7 @@ import certificateRoutes from "./certificateRoute"
 import scheduleRoutes from "./scheduleRoute"
 import bogRoutes from "./blog";
 import subscribeRoute from "./subscribeRoute"
+import contactRoute from "./contactRoute"
 
 const router = express.Router();
 
@@ -62,6 +63,10 @@ const routes = [
   {
     path: "/sub",
     route: subscribeRoute
+  },
+  {
+    path: "/contact",
+    route: contactRoute
   }
 
 ];
