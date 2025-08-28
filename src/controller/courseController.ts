@@ -143,7 +143,7 @@ const courseController = {
     deleteCourse: catchAsync(async (req, res) => {
         try {
             const { id } = req.params;
-            await courseService.deleteCourse(id);
+            await courseService.deleteCourse({id});
             return res.status(200).json({
                 message: "Course deleted successfully",
             });

@@ -114,15 +114,10 @@ const courseService = {
     //     const courseId = filter.id;
 
     //     // Delete related entities in the correct order
-    //     const lessons = await prisma.lesson.findMany({ where: { courseId } });
-
-    //     for (const lesson of lessons) {
-    //         await prisma.discussion.deleteMany({ where: { lessonId: lesson.id } });
-    //     }
+    //      await prisma.lesson.findMany({ where: { courseId } });
     //     await prisma.lesson.deleteMany({ where: { courseId } });
     //     await prisma.assessment.deleteMany({ where: { courseId } });
     //     await prisma.enrollment.deleteMany({ where: { courseId } });
-    //     await prisma.payment.deleteMany({ where: { courseId } });
     //     await prisma.progress.deleteMany({ where: { courseId } });
     //     await prisma.certificate.deleteMany({ where: { courseId } });
 
@@ -132,6 +127,18 @@ const courseService = {
     // }
 
     deleteCourse: async (filter: Prisma.CourseWhereUniqueInput) => {
+        // use transaction
+        const courseId = filter.id;
+
+        // Delete related entities in the correct order
+        await prisma.$transaction([
+            prisma.lesson.deleteMany({ where: { courseId } }),
+            prisma.assessment.deleteMany({ where: { courseId } }),
+            prisma.enrollment.deleteMany({ where: { courseId } }),
+            prisma.progress.deleteMany({ where: { courseId } }),
+            prisma.certificate.deleteMany({ where: { courseId } }),
+        ]);
+        // Finally, delete the course   
         const deletedCourse = await prisma.course.delete({ where: filter });
         return deletedCourse;
     }
