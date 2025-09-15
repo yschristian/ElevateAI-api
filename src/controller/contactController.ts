@@ -50,7 +50,7 @@ const contactController = {
   getContactById: catchAsync(async (req, res) => {
     try {
       const { id } = req.params;
-      const contact = await contactService.getById(id)
+      const contact = await contactService.getById({id})
       
       return res.status(200).json({
         message: "Contact fetched successfully",

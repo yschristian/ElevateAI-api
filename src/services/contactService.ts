@@ -12,8 +12,10 @@ const contactService = {
         });
     },
 
-    getById: async (id:any) => {
-        return await prisma.contact.findFirst(id);
+    getById: async (filter:Prisma.contactWhereInput) => {
+        return await prisma.contact.findFirst({
+            where:filter
+        });
     },
 
     deleteContact: async (filter: Prisma.contactWhereUniqueInput) => {
