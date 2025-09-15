@@ -22,7 +22,8 @@ const courseService = {
                         email: true,
                         role: true,
                     }
-                }
+                },
+                lessons:true,
             }
         });
         return courses;
@@ -62,7 +63,9 @@ const courseService = {
                         email: true,
                         role: true,
                     }
-                }
+                },
+                 lessons:true,
+                
             }
         });
         return courses;
@@ -82,7 +85,8 @@ const courseService = {
                         email: true,
                         role: true,
                     }
-                }
+                },
+                 lessons:true,
             }
         });
         return courses;

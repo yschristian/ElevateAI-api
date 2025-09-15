@@ -1,5 +1,7 @@
 import contactService from "../services/contactService";
 import catchAsync from "../helper/catchAsync";
+import mailer from "../helper/mail";
+
 
 const contactController = {
   // Create a new contact
@@ -13,6 +15,7 @@ const contactController = {
         message,
         subject
       });
+      await mailer({ email: email, FullName:FullName }, "Contact");
       return res.status(201).json({
         message: "Message sent successfully",
         data: response,

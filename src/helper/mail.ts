@@ -11,6 +11,7 @@ interface UserInfo {
   emailToken?: string;
   certificate?: Buffer;
   scheduleDetails?: string;
+  FullName?: string
 }
 
 interface CourseInfo {
@@ -19,6 +20,7 @@ interface CourseInfo {
   courseId?: string;
 }
 
+
 type Action =
   | 'forgotPassword'
   | 'Register'
@@ -26,7 +28,8 @@ type Action =
   | 'generateCerticate'
   | 'ScheduleReminder'
   | 'Subscribe'
-  | 'NewCourse';
+  | 'NewCourse'
+  | 'Contact'
 
 const mailer = async (userInfo: UserInfo, action: Action, courseInfo?: CourseInfo): Promise<void> => {
   // console.log('Sending email...', userInfo, action);
@@ -124,6 +127,36 @@ const mailer = async (userInfo: UserInfo, action: Action, courseInfo?: CourseInf
           </div>
         </div>`;
       break;
+
+    case 'Contact':
+      subject = 'We’ve received your message – ElevAIte Support';
+      emailTo = userInfo.email;
+      const FullName = userInfo.FullName;
+
+      composition = `
+    <div style="font-family: 'Helvetica Neue', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);">
+      <div style="background-color: #2563eb; padding: 20px; border-radius: 8px 8px 0 0; text-align: center;">
+        <h1 style="color: #ffffff; margin: 0; font-size: 24px; font-weight: 600;">ElevAIte</h1>
+      </div>
+      <div style="padding: 30px;">
+        <h2 style="color: #2563eb; font-size: 20px; font-weight: 500; margin-bottom: 20px;">We’ve received your message!</h2>
+        <p style="color: #333333; font-size: 16px; line-height: 1.5; margin-bottom: 20px;">
+          Hello ${FullName || 'User'},
+        </p>
+        <p style="color: #333333; font-size: 16px; line-height: 1.5; margin-bottom: 20px;">
+          Thank you for reaching out to ElevAIte. Our support team has received your message and will get back to you as soon as possible. 
+        </p>
+        <p style="color: #666666; font-size: 14px; line-height: 1.5; margin-bottom: 0;">
+          Best regards,<br/>
+          <strong>The ElevAIte Team</strong>
+        </p>
+      </div>
+      <div style="background-color: #f8f9fa; padding: 15px; text-align: center; border-radius: 0 0 8px 8px; font-size: 12px; color: #666666;">
+        © 2025 ElevAIte. All rights reserved.<br/>
+      </div>
+    </div>`;
+      break;
+
 
     case 'verifyCode':
       subject = 'Email Verification Code';
