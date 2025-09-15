@@ -4,6 +4,7 @@ import { isAdmin } from "../middleware/isLoggedin";
 
 const router = express.Router();
 router.post("/send", contactController.createContact)
-        .get("/all",isAdmin, contactController.getAllContacts)    
+        .get("/all", isAdmin, contactController.getAllContacts)
         .get("/single/:id", contactController.getContactById)
+        .delete("/delete/:id", contactController.deleteContact)
 export default router;

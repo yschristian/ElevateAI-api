@@ -64,6 +64,15 @@ const contactController = {
       });
     }
   }),
+  deleteContact:catchAsync(async(req,res)=>{
+    try {
+      const { id } = req.params;
+      const deleteMessage = await contactService.deleteContact({id})
+      return res.status(200).json(deleteMessage)
+    } catch (error) {
+      console.log(error)
+    }
+  }),
 
   // Update a contact by ID
   updateContact: catchAsync(async (req, res) => {
