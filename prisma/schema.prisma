@@ -10,6 +10,7 @@ generator client {
 enum role {
   admin
   learner
+  Instructor
 }
 
 enum courseType {
