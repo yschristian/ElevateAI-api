@@ -104,7 +104,8 @@ const courseService = {
                         email: true,
                         role: true,
                     }
-                }
+                },
+                lessons:true
 
             }
         });
