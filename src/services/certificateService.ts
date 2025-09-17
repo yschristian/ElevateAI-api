@@ -20,7 +20,7 @@ const cerficateService = {
                 }
             }
         });
-        
+
         const uniqueCertificates = [];
         const seen = new Set();
 
@@ -31,7 +31,7 @@ const cerficateService = {
                 uniqueCertificates.push(cert);
             }
         }
-        
+
         return uniqueCertificates;
     },
     getCeritificateById: async (filter: Prisma.certificateWhereInput) => {
@@ -64,7 +64,7 @@ const cerficateService = {
                 uniqueCertificates.push(cert);
             }
         }
-        
+
         return uniqueCertificates;
 
     },
@@ -75,17 +75,27 @@ const cerficateService = {
         return certificate;
     },
     downloadCertificate: async (certificateId: string) => {
-        const certificate = await prisma.certificate.findUnique({
-            where: { id: certificateId },
-            select: { urlOfCert: true }
-        });
+        try {
+            const certificate = await prisma.certificate.findUnique({
+                where: { id: certificateId },
+                select: { urlOfCert: true }
+            });
 
-        if (!certificate) {
+            if (!certificate) {
+                return {
+                    error: "Certificate not found"
+                }
+            }
+
             return {
-                error: "Certificate not found"
+                success: true,
+                url: certificate.urlOfCert
+            };
+        } catch (error) {
+            return {
+                error: "Database error occurred"
             }
         }
-        return certificate.urlOfCert;
     }
 
 }

@@ -1,6 +1,7 @@
 import cerficateService from "../services/certificateService";
 import catchAsync from "../helper/catchAsync";
 import { Request } from "express";
+import prisma from "../client";
 
 interface CustomRequest extends Request {
     user: any;
@@ -43,7 +44,7 @@ const certificateController = {
             console.log(error)
         }
     }),
-     getNumberCertificateByUserId: catchAsync(async (req, res) => {
+    getNumberCertificateByUserId: catchAsync(async (req, res) => {
         try {
             const userId = (req as CustomRequest).user.id;
             const certificates = await cerficateService.getCeritificateById({ userId });
@@ -81,21 +82,57 @@ const certificateController = {
             console.log(error)
         }
     }),
-    downloadCertificate: catchAsync(async (req, res) => {
-        try {
-            const certificateId = req.params.certificateId;
-            const certificateResponse = await cerficateService.downloadCertificate(certificateId);
-            if (typeof certificateResponse === 'object' && 'error' in certificateResponse) {
-                return res.status(404).json({ error: certificateResponse.error });
-            }
-            return res.status(200).json({
-                message: "Certificate downloaded successfully",
-                data: certificateResponse
-            });
-        } catch (error) {
-            console.log(error)
+    
+ downloadCertificate : catchAsync(async (req, res) => {
+  try {
+    const certificateId = req.params.certificateId;
+    const certificate = await prisma.certificate.findUnique({
+      where: { id: certificateId },
+      include: { course: true }
+    });
+
+    if (!certificate) {
+      return res.status(404).json({ error: "Certificate not found" });
+    }
+
+    const originalUrl = certificate.urlOfCert;
+    
+    const urlVariations = [
+      originalUrl,
+      originalUrl.replace('/raw/upload/', '/image/upload/'),
+      originalUrl.replace('https://res.cloudinary.com/', 'https://cloudinary-a.akamaihd.net/'),
+      originalUrl.replace('/raw/upload/v', '/raw/upload/fl_attachment/v')
+    ];
+
+    for (const url of urlVariations) {      
+      try {
+        const response = await fetch(url);
+        
+        if (response.ok) {
+        //   console.log(`Success with URL: ${url}`);
+          const pdfArrayBuffer = await response.arrayBuffer();
+          const pdfBuffer = Buffer.from(pdfArrayBuffer);
+          
+          res.set({
+            'Content-Type': 'application/pdf',
+            'Content-Disposition': `attachment; filename="${certificate.course.title.replace(/[^a-zA-Z0-9]/g, '_')}_Certificate.pdf"`,
+            'Content-Length': pdfBuffer.length.toString(),
+          });
+          
+          return res.send(pdfBuffer);
         }
-    })
+      } catch (urlError:any) {
+        console.log(`Failed with URL ${url}:`, urlError.message);
+        continue;
+      }
+    }
+        return res.status(502).json({ error: "Certificate file is not accessible" });
+    
+  } catch (error) {
+    console.error('Download certificate error:', error);
+    return res.status(500).json({ error: "Failed to download certificate" });
+  }
+}),
 }
 
 export default certificateController;
